@@ -4,7 +4,7 @@ title: '#4471, split · three problems, three tickets'
 owner: tmaconnelly
 status: draft
 reviewed: 2026-10-29
-signature: tmaconnelly + Claude Code
+signature: v1.eyJzdWIiOiI4NzU0IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyODEwMzEsImV4cCI6MTc5MzM2NzQzMX0.fuoV5Dc7KJZs3c9v76xsVsvCr5nzZGY2gImdxSp7Sz4
 ---
 
 <script>
