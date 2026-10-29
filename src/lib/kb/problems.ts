@@ -10,9 +10,9 @@ export type Problem = Cause | 'oneDayMove';
 
 // The ticket each problem is filed as, in the repo this kb lives in.
 export const TICKETS: Record<Problem, { issue: number; title: string; state: string }> = {
-  parser: { issue: 1, title: 'Shared parser reads every date month first', state: 'closed · completed' },
-  hint: { issue: 2, title: 'booking-v3 prints MM/DD/YYYY under its date field', state: 'closed · completed' },
-  oneDayMove: { issue: 3, title: 'Some dates move by one day', state: 'closed · duplicate of #1' },
+  parser: { issue: 1, title: 'Shared parser reads every date month first', state: 'fixed · fix(dates): parse dd/mm for eu locales' },
+  hint: { issue: 2, title: 'booking-v3 prints MM/DD/YYYY under its date field', state: "won't fix · booking-v3 form retired" },
+  oneDayMove: { issue: 3, title: 'Some dates move by one day', state: 'duplicate of #1 · filed under parser' },
 };
 
 export type ProblemRow = {

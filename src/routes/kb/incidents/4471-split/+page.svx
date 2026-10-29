@@ -16,11 +16,12 @@ signature: v1.eyJzdWIiOiI4NzU0IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
 
 [#4471](/kb/incidents/4471) says one issue, one fix queued. It held three problems. The reports
 were merged because they sound alike, not because they share a cause. Each problem now has its
-own ticket, and all three are closed.
+own ticket, and all three are closed. Engineering closed #4471 on 5 October: the parser is
+fixed, and the booking-v3 hint won't be fixed because that form is retired.
 
 <Callout>
-Resolved. #4471 is split into its tickets, counted the desk's way, and each ticket is closed by
-the commit that published this page.
+Resolved. `parser`: fixed (`fix(dates): parse dd/mm for eu locales`). `hint`: won't fix, booking-v3
+form retired. `oneDayMove`: closed as a duplicate of `parser`, where the desk files it.
 </Callout>
 
 ## What #4471 holds
@@ -41,7 +42,7 @@ the wrong date.
 **`hint`: booking-v3 prints `MM/DD/YYYY` under its date field.** At a day-first tenant on
 booking-v3, people type what the hint tells them, month first, and the form reads it the tenant's
 way. The result looks like the parser bug, but only through that form, and fixing the parser
-does not touch it: the form needs the tenant's date order in its hint (or a date picker).
+does not touch it. Won't fix: the booking-v3 form is retired, so the hint goes with it.
 
 **`oneDayMove`: some dates move by one day.** These are not swaps. Tuesday 12 May shows as
 Monday 11 May; a meeting reads Tuesday in Lisbon and Monday in Toronto; an invite arrives before
@@ -76,6 +77,7 @@ what the reporter felt, not what broke.
 
 - Merge on cause (tenant, channel, form), not on subject. [Triage](/kb/triage/dedupe) needs a
   new decision record to replace 0001.
-- Watch for one-day moves: if more come in, `oneDayMove` gets reopened as its own fix.
+- Watch for one-day moves after the parser fix: if they keep coming, `oneDayMove` gets reopened
+  as its own fix.
 
 <RenderStamp {signature} />
