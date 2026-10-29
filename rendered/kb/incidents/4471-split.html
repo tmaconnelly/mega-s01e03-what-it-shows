@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+		<link href="../../_app/immutable/assets/5.DH2cqoeh.css" rel="stylesheet">
+		<link href="../../_app/immutable/assets/runbook.uHeOknoi.css" rel="stylesheet">
+		<link href="../../_app/immutable/assets/Callout.89E4ZsOX.css" rel="stylesheet">
+		<link href="../../_app/immutable/assets/CauseTable.AZcnZ4nk.css" rel="stylesheet">
+		<link rel="modulepreload" href="../../_app/immutable/entry/start.-3pvT7QT.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/entry.47dl0vMW.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/effects.CVekgGwV.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/index.CEWhRVyJ.js">
+		<link rel="modulepreload" href="../../_app/immutable/entry/app.BkiiExh8.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/store.C4GfuoIB.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/disclose-version.B6SpUQf2.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/props.B3gP5v-Q.js">
+		<link rel="modulepreload" href="../../_app/immutable/nodes/0.CngYf6XY.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/snippet.B91FSaPQ.js">
+		<link rel="modulepreload" href="../../_app/immutable/nodes/5.DGkUzDNn.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/5.DCOPTdex.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/legacy.CNZF2nw7.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/runbook.Bc24RimO.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/Callout.BpIVGvbd.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/CauseTable.DR7V9ho2.js"><!--[--><!--]--><title>#4471, split · three problems, three tickets · support kb</title>
+  </head>
+  <body>
+    <div style="display: contents"><!--[--><!--[--><!----><!----><div class="kb svelte-60g32v"><header><a class="crumb svelte-60g32v" href="/kb">support desk · kb</a> <h1 class="svelte-60g32v">#4471, split · three problems, three tickets</h1> <p class="meta svelte-60g32v"><span>owner <b>tmaconnelly</b></span> <span class="status draft svelte-60g32v">draft</span> <span class="svelte-60g32v ">reviewed 2026-10-29 · 0 days ago</span></p></header> <!--[!--><!--]--> <main><p><a href="/kb/incidents/4471">#4471</a> says one issue, one fix queued. It holds three problems.
+The reports were merged because they sound alike, not because they share a cause. One fix to
+the parser leaves two of them open.</p> <aside class="warn svelte-hdh0t2"><!---->Not known, not one issue. Each problem below has its own ticket, and each ticket carries its own
+count. Fixing the parser does not close the other two.<!----></aside><!----> <h2>What #4471 holds</h2> <p class="sum svelte-vupno8"><strong>412</strong> reports merged into #4471 · <strong>3</strong> problems, one ticket each</p> <table><thead><tr><th>ticket</th><th>problem</th><th>reports</th><th>tenants</th><th>channels</th><th>mistagged</th><th>seen</th></tr></thead><tbody><!--[--><tr class="svelte-vupno8 "><!--[!--><td class="svelte-vupno8"><a href="https://github.com/tmaconnelly/mega-s01e03-what-it-shows/issues/1">#1</a></td> <td class="svelte-vupno8"><code>parser</code> · Shared parser reads every date month first</td><!--]--><td class="svelte-vupno8"><strong>374</strong></td><td class="svelte-vupno8">11</td><td class="small svelte-vupno8">app ×202 · email ×147 · form ×25</td><td class="svelte-vupno8">23</td><td class="small svelte-vupno8">2026-04-01 → 2026-10-04</td></tr><tr class="svelte-vupno8 "><!--[!--><td class="svelte-vupno8"><a href="https://github.com/tmaconnelly/mega-s01e03-what-it-shows/issues/2">#2</a></td> <td class="svelte-vupno8"><code>hint</code> · booking-v3 prints MM/DD/YYYY under its date field</td><!--]--><td class="svelte-vupno8"><strong>33</strong></td><td class="svelte-vupno8">3</td><td class="small svelte-vupno8">form ×33</td><td class="svelte-vupno8">15</td><td class="small svelte-vupno8">2026-04-17 → 2026-09-22</td></tr><tr class="svelte-vupno8 "><!--[!--><td class="svelte-vupno8"><a href="https://github.com/tmaconnelly/mega-s01e03-what-it-shows/issues/3">#3</a></td> <td class="svelte-vupno8"><code>shift</code> · Some dates move by one day</td><!--]--><td class="svelte-vupno8"><strong>5</strong></td><td class="svelte-vupno8">5</td><td class="small svelte-vupno8">email ×3 · app ×2</td><td class="svelte-vupno8">5</td><td class="small svelte-vupno8">2026-04-02 → 2026-10-04</td></tr><!--]--></tbody></table><!----> <p>Counts are built from the ticket export at render time, so they move as the desk keeps merging.
+Each report is counted once: the export repeats some reports across its pages.</p> <h2>The three problems</h2> <p><strong><code>parser</code>: the shared parser reads every date month first.</strong> Our tenants write the day
+first, so 7 April comes out as 4 July. Every tenant on file is day first, so every tenant is hit,
+through the app, email and the booking-v2 form. Day and month swap exactly; the weekday follows
+the wrong date.</p> <p><strong><code>hint</code>: booking-v3 prints <code>MM/DD/YYYY</code> under its date field.</strong> At a day-first tenant on
+booking-v3, people type what the hint tells them, month first, and the form reads it the tenant’s
+way. The result looks like the parser bug, but only through that form, and fixing the parser
+does not touch it: the form needs the tenant’s date order in its hint (or a date picker).</p> <p><strong><code>shift</code>: some dates move by one day.</strong> These are not swaps. Tuesday 12 May shows as Monday
+11 May; a meeting reads Tuesday in Lisbon and Monday in Toronto; an invite arrives before the
+booking was made. That is a time-zone or midnight-UTC bug. The desk already noted these as a
+one-day move, then filed them under the parser by tenant, where they would stay open after the
+parser fix.</p> <h2>How each report was placed</h2> <ol><li>Count each report id once.</li> <li>Read as a one-day move (desk notes): <code>shift</code>.</li> <li>Otherwise, by tenant (<code>#lib/kb/causes</code>): a day-first tenant’s report through booking-v3’s
+form is <code>hint</code>; any other report from a day-first tenant is <code>parser</code>.</li> <li>No tenant on file: <code>unplaced</code>, and someone reads it.</li></ol> <p>Intake’s tag is not used. It is a guess from the reporter’s browser, and the <em>mistagged</em> column
+shows how often it differs.</p> <h2>Why they were merged</h2> <p>Merging by subject line (<a href="/kb/decisions/0001-dedupe-by-subject">decision 0001</a>) puts
+“Date is wrong” from a parser bug and “Date is wrong” from a form hint in one ticket. Subject is
+what the reporter felt, not what broke. The earlier table on #4471 already showed <code>hint</code> as
+“not this ticket”, with no ticket of its own:</p> <p class="sum svelte-5f1c7s"><strong>412</strong> reports merged into #4471 · <strong>2</strong> causes</p> <table><thead><tr><th>cause</th><th>reports</th><th>tagged as</th><th>tenants</th><th>seen</th><th></th></tr></thead><tbody><!--[--><tr class="svelte-5f1c7s "><td class="svelte-5f1c7s"><code>parser</code></td><td class="svelte-5f1c7s">379</td><td class="tags svelte-5f1c7s">parser ×356 · hint ×23</td><td class="svelte-5f1c7s">11</td><td class="svelte-5f1c7s">2026-04-01 → 2026-10-04</td><td class="svelte-5f1c7s">#4471</td></tr><tr class="svelte-5f1c7s wrong"><td class="svelte-5f1c7s"><code>hint</code></td><td class="svelte-5f1c7s">33</td><td class="tags svelte-5f1c7s">hint ×18 · parser ×15</td><td class="svelte-5f1c7s">3</td><td class="svelte-5f1c7s">2026-04-17 → 2026-09-22</td><td class="svelte-5f1c7s">not this ticket — no ticket of its own</td></tr><!--]--></tbody></table> <!--[--><!--[--><p class="note svelte-5f1c7s">5 reports read as a one-day move; filed under <code>parser</code> by tenant.</p><!--]--><!--[!--><!--]--><!--]--><!----> <h2>What to change</h2> <ul><li>Track each problem on its own ticket, and close #4471’s “known” status once they are linked.</li> <li>Merge on cause (tenant, channel, form), not on subject. <a href="/kb/triage/dedupe">Triage</a> needs a
+new decision record to replace 0001.</li> <li>Read the one-day moves as a separate bug when they come in, not as a footnote.</li></ul> <!--[--><p class="stamp svelte-5qojh0">desk ref <b class="svelte-5qojh0">DR-0SE9-FYZF</b></p><!--]--><!----><!----></main> <footer class="svelte-60g32v">Pages are written by people. Tables and charts are built from data at render time.</footer></div><!----><!----><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_3y4bgc = {
+						base: new URL("../..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					const data = [null,null];
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.-3pvT7QT.js"),
+						import("../../_app/immutable/entry/app.BkiiExh8.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 5],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
