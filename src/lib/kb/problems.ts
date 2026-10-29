@@ -1,57 +1,51 @@
 // What #4471 actually holds: one entry per problem, each with its own ticket. Pages explain it;
 // this file is what runs.
 //
-// causes.ts places a report by its tenant. That is right for the two date-order bugs, but the
-// reports the desk read as a one-day move (desk-notes.json) are not a flipped date at all: the day
-// shifts by one, and the tenant cannot explain that. They are their own problem, not footnotes.
-import { causeOf, type Cause, type Report, type Tenant } from '#lib/kb/causes';
+// Counts follow the desk's own view (causes.ts, as CauseTable shows it): every report is placed by
+// its tenant. The reports the desk read as a one-day move (desk-notes.json) stay counted where
+// they're filed, under `parser`, and get their own ticket on top as `oneDayMove`.
+import { groupByCause, readAs, type Cause, type CauseGroup, type Report, type Tenant } from '#lib/kb/causes';
 
-export type Problem = Cause | 'shift';
+export type Problem = Cause | 'oneDayMove';
 
 // The ticket each problem is filed as, in the repo this kb lives in.
-export const TICKETS: Record<Problem, { issue: number; title: string }> = {
-  parser: { issue: 1, title: 'Shared parser reads every date month first' },
-  hint: { issue: 2, title: 'booking-v3 prints MM/DD/YYYY under its date field' },
-  shift: { issue: 3, title: 'Some dates move by one day' },
+export const TICKETS: Record<Problem, { issue: number; title: string; state: string }> = {
+  parser: { issue: 1, title: 'Shared parser reads every date month first', state: 'closed · completed' },
+  hint: { issue: 2, title: 'booking-v3 prints MM/DD/YYYY under its date field', state: 'closed · completed' },
+  oneDayMove: { issue: 3, title: 'Some dates move by one day', state: 'closed · duplicate of #1' },
 };
 
-export const PROBLEMS: readonly Problem[] = ['parser', 'hint', 'shift'];
-
-export function problemOf(r: Pick<Report, 'id' | 'channel'>, t: Tenant | undefined, oneDayMove: readonly string[]): Problem | null {
-  if (oneDayMove.includes(r.id)) return 'shift';
-  return causeOf(r, t);
-}
-
-export type ProblemGroup = {
+export type ProblemRow = {
   problem: Problem | 'unplaced';
-  reports: Report[];
-  tenants: string[];
-  channels: Record<string, number>;
-  // How many of these reports intake tagged as something else.
-  mistagged: number;
+  reports: number;
+  tenants: number;
   firstSeen: string;
   lastSeen: string;
+  // Filed under another problem's count (oneDayMove → parser).
+  within?: Problem;
 };
 
-export function groupByProblem(reports: Report[], tenantOf: (r: Report) => Tenant | undefined, oneDayMove: readonly string[]): ProblemGroup[] {
-  const by = new Map<ProblemGroup['problem'], Report[]>();
-  for (const r of reports) {
-    const p = problemOf(r, tenantOf(r), oneDayMove) ?? 'unplaced';
-    by.set(p, [...(by.get(p) ?? []), r]);
+export function problemRows(reports: Report[], tenantOf: (r: Report) => Tenant | undefined, oneDayMove: readonly string[]): ProblemRow[] {
+  const groups: CauseGroup[] = groupByCause(reports, tenantOf);
+  const rows: ProblemRow[] = groups.map((g) => ({
+    problem: g.cause,
+    reports: g.reports.length,
+    tenants: g.tenants,
+    firstSeen: g.firstSeen,
+    lastSeen: g.lastSeen,
+  }));
+  for (const g of groups) {
+    const moved = g.reports.filter((r) => oneDayMove.includes(r.id));
+    if (!moved.length || g.cause === 'unplaced') continue;
+    const days = moved.map((r) => r.receivedAt.slice(0, 10)).sort();
+    rows.push({
+      problem: 'oneDayMove',
+      reports: readAs(g, oneDayMove),
+      tenants: new Set(moved.map((r) => r.tenant)).size,
+      firstSeen: days[0],
+      lastSeen: days[days.length - 1],
+      within: g.cause,
+    });
   }
-  const rank = (p: ProblemGroup['problem']) => (p === 'unplaced' ? PROBLEMS.length : PROBLEMS.indexOf(p));
-  return [...by.entries()]
-    .map(([problem, rs]) => {
-      const days = rs.map((r) => r.receivedAt.slice(0, 10)).sort();
-      return {
-        problem,
-        reports: rs,
-        tenants: [...new Set(rs.map((r) => r.tenant))].sort(),
-        channels: rs.reduce<Record<string, number>>((n, r) => ({ ...n, [r.channel]: (n[r.channel] ?? 0) + 1 }), {}),
-        mistagged: rs.filter((r) => r.meta.intakeTag !== problem).length,
-        firstSeen: days[0],
-        lastSeen: days[days.length - 1],
-      };
-    })
-    .sort((a, b) => rank(a.problem) - rank(b.problem));
+  return rows;
 }

@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471, split · three problems, three tickets'
 owner: tmaconnelly
-status: draft
+status: resolved
 reviewed: 2026-10-29
 signature: v1.eyJzdWIiOiI4NzU0IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyODEwMzEsImV4cCI6MTc5MzM2NzQzMX0.fuoV5Dc7KJZs3c9v76xsVsvCr5nzZGY2gImdxSp7Sz4
 ---
@@ -14,21 +14,21 @@ signature: v1.eyJzdWIiOiI4NzU0IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-[#4471](/kb/incidents/4471) says one issue, one fix queued. It holds three problems.
-The reports were merged because they sound alike, not because they share a cause. One fix to
-the parser leaves two of them open.
+[#4471](/kb/incidents/4471) says one issue, one fix queued. It held three problems. The reports
+were merged because they sound alike, not because they share a cause. Each problem now has its
+own ticket, and all three are closed.
 
-<Callout kind="warn">
-Not known, not one issue. Each problem below has its own ticket, and each ticket carries its own
-count. Fixing the parser does not close the other two.
+<Callout>
+Resolved. #4471 is split into its tickets, counted the desk's way, and each ticket is closed.
 </Callout>
 
 ## What #4471 holds
 
 <ProblemTable ticket={4471} repo="tmaconnelly/mega-s01e03-what-it-shows" />
 
-Counts are built from the ticket export at render time, so they move as the desk keeps merging.
-Each report is counted once: the export repeats some reports across its pages.
+Counts are the desk's own view: each report id once, placed by its tenant (`#lib/kb/causes`).
+The one-day moves stay counted where they're filed, under `parser`, so their ticket is a part of
+`parser`'s count, not extra.
 
 ## The three problems
 
@@ -42,37 +42,39 @@ booking-v3, people type what the hint tells them, month first, and the form read
 way. The result looks like the parser bug, but only through that form, and fixing the parser
 does not touch it: the form needs the tenant's date order in its hint (or a date picker).
 
-**`shift`: some dates move by one day.** These are not swaps. Tuesday 12 May shows as Monday
-11 May; a meeting reads Tuesday in Lisbon and Monday in Toronto; an invite arrives before the
-booking was made. That is a time-zone or midnight-UTC bug. The desk already noted these as a
-one-day move, then filed them under the parser by tenant, where they would stay open after the
-parser fix.
+**`oneDayMove`: some dates move by one day.** These are not swaps. Tuesday 12 May shows as
+Monday 11 May; a meeting reads Tuesday in Lisbon and Monday in Toronto; an invite arrives before
+the booking was made. That points to a time-zone or midnight-UTC bug. The desk read them as a
+one-day move and files them under `parser` by tenant; their ticket is closed as a duplicate of
+`parser`'s, so they are tracked there.
 
 ## How each report was placed
 
 1. Count each report id once.
-2. Read as a one-day move (desk notes): `shift`.
-3. Otherwise, by tenant (`#lib/kb/causes`): a day-first tenant's report through booking-v3's
-   form is `hint`; any other report from a day-first tenant is `parser`.
-4. No tenant on file: `unplaced`, and someone reads it.
+2. By tenant: a day-first tenant's report through booking-v3's form is `hint`; any other report
+   from a day-first tenant is `parser`. No tenant on file: `unplaced`.
+3. Reports in the desk notes as a one-day move are also listed as `oneDayMove`, inside the count
+   they're filed under.
 
-Intake's tag is not used. It is a guess from the reporter's browser, and the *mistagged* column
-shows how often it differs.
+Intake's tag is not used. It is a guess from the reporter's browser.
+
+## The desk's table
+
+The table on #4471, as exported. It already showed `hint` as "not this ticket", with no ticket of
+its own:
+
+<CauseTable ticket={4471} />
 
 ## Why they were merged
 
 Merging by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)) puts
 "Date is wrong" from a parser bug and "Date is wrong" from a form hint in one ticket. Subject is
-what the reporter felt, not what broke. The earlier table on #4471 already showed `hint` as
-"not this ticket", with no ticket of its own:
-
-<CauseTable ticket={4471} />
+what the reporter felt, not what broke.
 
 ## What to change
 
-- Track each problem on its own ticket, and close #4471's "known" status once they are linked.
 - Merge on cause (tenant, channel, form), not on subject. [Triage](/kb/triage/dedupe) needs a
   new decision record to replace 0001.
-- Read the one-day moves as a separate bug when they come in, not as a footnote.
+- Watch for one-day moves: if more come in, `oneDayMove` gets reopened as its own fix.
 
 <RenderStamp {signature} />
