@@ -19,7 +19,8 @@ were merged because they sound alike, not because they share a cause. Each probl
 own ticket, and all three are closed.
 
 <Callout>
-Resolved. #4471 is split into its tickets, counted the desk's way, and each ticket is closed.
+Resolved. #4471 is split into its tickets, counted the desk's way, and each ticket is closed by
+the commit that published this page.
 </Callout>
 
 ## What #4471 holds
